@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alip & Aull — Vintage Scrapbook (5 pages)</title>
+<style>
+:root{
+  --bg:#e6dac4;
+  --paper:#fbf3e7;
+  --accent:#8a5f3a;
+  --ink:#3b2b24;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family: Georgia, serif; background: linear-gradient(180deg,#efe4d0,#e6dac4);
+  -webkit-font-smoothing:antialiased;
+}
+.container{
+  width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 20px;
+}
+.scrapbook{
+  width:1000px; max-width:98vw; height:640px; background:transparent; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.spread{
+  width:940px; height:600px; background: url('assets/paper_texture.jpg'); background-size:cover;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35); border-radius:12px; display:flex; overflow:visible;
+  padding:28px;
+}
+.page{
+  width:46%; margin:0 2%; background:var(--paper); border-radius:8px; position:relative;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18); padding:18px; overflow:hidden;
+  transform-origin:left center;
+  transition:transform .9s cubic-bezier(.2,.8,.2,1), box-shadow .5s;
+}
+.page.left{transform-origin:right center;}
+.photo-frame{
+  width:100%; height:62%; background:#fff; border-radius:8px; position:relative; overflow:hidden;
+  border:6px solid #e6d6bf;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.photo-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+.polaroid{
+  background:#fff; padding:12px 12px 36px 12px; box-shadow:0 6px 14px rgba(0,0,0,0.12);
+  border-radius:6px; position:relative;
+}
+.tape{
+  width:110px; height:28px; background: linear-gradient(90deg,#f7e9d6,#e9d7bd);
+  position:absolute; left:50%; transform:translateX(-50%) rotate(-6deg); top:-10px;
+  border-radius:4px; box-shadow:0 4px 8px rgba(0,0,0,0.12);
+}
+.title-small{ font-size:14px; color:var(--accent); margin-top:12px; text-align:center; font-weight:700;}
+.caption{ font-size:18px; color:var(--ink); margin-top:14px; text-align:center; padding:0 6px; line-height:1.35;}
+.stamp{ position:absolute; right:12px; top:12px; opacity:0.9; transform:rotate(-12deg); }
+.clip{ position:absolute; left:12px; top:8px; transform:rotate(-10deg); opacity:0.95; }
+
+.controls{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:12px; z-index:50; }
+.btn{ background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; box-shadow:0 6px 14px rgba(0,0,0,0.18);}
+.btn.ghost{ background:transparent; color:var(--accent); border:1px solid rgba(0,0,0,0.06);}
+
+.music-btn{ position:absolute; top:18px; right:18px; background:var(--accent); color:#fff; border-radius:50%; width:46px; height:46px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 12px rgba(0,0,0,0.2); z-index:60;}
+
+.page::after{
+  content:''; position:absolute; left:-30px; top:0; width:30px; height:100%; background:linear-gradient(90deg, rgba(0,0,0,0.06), transparent); transform:skewX(-10deg); pointer-events:none;
+}
+
+/* torn edge */
+.torn{
+  position:absolute; left:0; right:0; height:36px; top:-22px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(255,255,255,0));
+  clip-path: polygon(0 20%,10% 0,20% 30%,30% 10%,40% 40%,50% 0,60% 30%,70% 10%,80% 35%,90% 5%,100% 25%,100% 100%,0 100%);
+  opacity:0.95;
+}
+
+/* responsive */
+@media(max-width:900px){
+  .spread{ flex-direction:column; height:84vh; width:92vw; padding:14px; }
+  .page{ width:100%; margin:10px 0; }
+  .page::after{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="scrapbook">
+    <div class="music-btn" id="musicBtn">▶</div>
+    <div class="spread" id="spread">
+      <div class="page left" id="leftPage">
+        <div class="torn"></div>
+        <div class="photo-frame polaroid">
+          <div class="tape"></div>
+          <img id="leftImg" src="assets/photo1.png" alt="left photo">
+        </div>
+        <div class="title-small" id="leftTitle">Our First Memory</div>
+        <div class="caption" id="leftCaption">A soft little title for the left page</div>
+        <img class="stamp" src="assets/sticker1.jpg" width="80" alt="stamp">
+      </div>
+
+      <div class="page right" id="rightPage">
+        <div class="torn"></div>
+        <div class="photo-frame polaroid">
+          <div class="tape"></div>
+          <img id="rightImg" src="assets/photo2.png" alt="right photo">
+        </div>
+        <div class="title-small" id="rightTitle">You & Me</div>
+        <div class="caption" id="rightCaption">A soft little title for the right page</div>
+        <img class="clip" src="assets/sticker2.jpg" width="64" alt="clip">
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="prevBtn">◀ Prev</button>
+      <button class="btn" id="nextBtn">Next ▶</button>
+    </div>
+  </div>
+</div>
+
+<audio id="bgm" loop src="assets/music.mp3"></audio>
+
+<script>
+const titles = ["Our First Memory","You & Me","Sweet Moment","Forever Together","Special Day"];
+const captions = [
+  "Semua yang indah, mulai saat aku memilihmu.",
+  "Aku suka cara kamu membuat dunia terlihat lebih lembut.",
+  "Yang sederhana, tapi selalu terasa luar biasa kalau sama kamu.",
+  "Mari tetap jadi kita, meski dunia berubah ribuan kali.",
+  "Selama kamu mau, aku akan selalu kembali."
+];
+let idx = 0; // left page index (shows idx and idx+1)
+
+const leftImg = document.getElementById('leftImg');
+const rightImg = document.getElementById('rightImg');
+const leftTitle = document.getElementById('leftTitle');
+const rightTitle = document.getElementById('rightTitle');
+const leftCaption = document.getElementById('leftCaption');
+const rightCaption = document.getElementById('rightCaption');
+
+function renderSpread(i){
+  // left -> i, right -> i+1
+  leftImg.src = `assets/photo${i+1}.jpg`;
+  leftTitle.textContent = titles[i];
+  leftCaption.textContent = captions[i];
+  if(i+1 < 5){
+    rightImg.src = `assets/photo${i+2}.jpg`;
+    rightTitle.textContent = titles[i+1];
+    rightCaption.textContent = captions[i+1];
+    document.getElementById('rightPage').style.visibility = 'visible';
+  } else {
+    // hide right page if no next
+    document.getElementById('rightPage').style.visibility = 'hidden';
+  }
+}
+
+// initial
+renderSpread(0);
+
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(idx+2 < 5) idx += 2;
+  renderSpread(idx);
+  animateFlip();
+});
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  if(idx-2 >= 0) idx -= 2;
+  else idx = 0;
+  renderSpread(idx);
+  animateFlip();
+});
+
+const bgm = document.getElementById('bgm');
+const musicBtn = document.getElementById('musicBtn');
+let playing = false;
+musicBtn.addEventListener('click', ()=>{
+  if(!playing){
+    bgm.play();
+    musicBtn.textContent = '⏸';
+  } else {
+    bgm.pause();
+    musicBtn.textContent = '▶';
+  }
+  playing = !playing;
+});
+
+// simple flip animation
+function animateFlip(){
+  const left = document.getElementById('leftPage');
+  const right = document.getElementById('rightPage');
+  left.style.transform = 'rotateY(-8deg) translateX(-4px)';
+  right.style.transform = 'rotateY(8deg) translateX(4px)';
+  left.style.boxShadow = '0 12px 30px rgba(0,0,0,0.35)';
+  right.style.boxShadow = '0 12px 30px rgba(0,0,0,0.35)';
+  setTimeout(()=>{ left.style.transform=''; right.style.transform=''; left.style.boxShadow=''; right.style.boxShadow=''; }, 520);
+}
+
+// allow easy editing: expose pages array in window
+window.SCRAPBOOK = {
+  titles: titles,
+  captions: captions
+};
+</script>
+</body>
+</html>
